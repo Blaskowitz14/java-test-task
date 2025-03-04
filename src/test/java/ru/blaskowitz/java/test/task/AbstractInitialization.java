@@ -3,12 +3,10 @@ package ru.blaskowitz.java.test.task;
 import org.junit.jupiter.api.BeforeEach;
 import ru.blaskowitz.java.test.task.dto.request.LoginDto;
 import ru.blaskowitz.java.test.task.model.Account;
-import ru.blaskowitz.java.test.task.model.PhoneData;
 import ru.blaskowitz.java.test.task.model.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
 
 public abstract class AbstractInitialization {
 
