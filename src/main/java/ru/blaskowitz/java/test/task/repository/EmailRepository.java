@@ -6,5 +6,5 @@ import ru.blaskowitz.java.test.task.model.EmailData;
 
 @Repository
 public interface EmailRepository extends JpaRepository<EmailData, Long> {
-    boolean existsByEmailAndUser_IdNot(String email, Long userId);
+    boolean existsByEmailAndUserIdNot(String email, Long userId);
 }

@@ -18,6 +18,7 @@ import ru.blaskowitz.java.test.task.model.Account;
 import ru.blaskowitz.java.test.task.repository.AccountRepository;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -70,8 +71,7 @@ public class AccountServiceImpl implements AccountService {
         fromAccount.setBalance(fromAccount.getBalance().subtract(transferDto.getAmount()));
         toAccount.setBalance(toAccount.getBalance().add(transferDto.getAmount()));
 
-        accountRepository.save(fromAccount);
-        accountRepository.save(toAccount);
+        accountRepository.saveAll(List.of(fromAccount, toAccount));
         log.info("Transfer completed successfully: {} transferred from account {} to account {}",
                  transferDto.getAmount(), fromAccount.getId(), toAccount.getId());
     }
@@ -80,13 +80,8 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void updateBalances() {
         log.info("Starting updateBalances");
-        try {
-            int updated = accountRepository.bulkUpdateBalances(INCREASE_MULTIPLIER, MAX_MULTIPLIER);
-            log.info("updateBalances: {} accounts updated", updated);
-        } catch (Exception e) {
-            log.error("Error occurred in updateBalances", e);
-            throw e;
-        }
+        int updated = accountRepository.bulkUpdateBalances(INCREASE_MULTIPLIER, MAX_MULTIPLIER);
+        log.info("updateBalances: {} accounts updated", updated);
     }
 
     private Account findAccountByUserId(Long userId) {
@@ -94,11 +89,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private Account getAccountOrThrow(Optional<Account> account) {
-        if (account.isEmpty()) {
-            log.error("Account not found");
-            throw new NotFoundException("Account not found");
-        }
-        return account.get();
+        return account.orElseThrow(() -> new NotFoundException("Account not found"));
     }
 
     private boolean canDecreaseBalance(BigDecimal amount, BigDecimal balance) {

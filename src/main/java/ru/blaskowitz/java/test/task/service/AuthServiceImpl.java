@@ -39,10 +39,7 @@ public class AuthServiceImpl implements AuthService {
     public JwtTokensDto getNewAccessToken(RefreshTokenDto refreshTokenDto) {
         log.info("Generating new access token");
         String refreshToken = refreshTokenDto.getToken();
-        if (!jwtProvider.validateToken(refreshToken)) {
-            log.error("Invalid refresh token provided");
-            throw new AuthenticationException("Invalid token");
-        }
+        validateToken(refreshToken);
         Long userId = jwtProvider.getUserId(refreshToken);
         log.info("New access token generated for user {}", userId);
         return JwtTokensDto.builder()
@@ -54,16 +51,20 @@ public class AuthServiceImpl implements AuthService {
     public JwtTokensDto getNewRefreshToken(RefreshTokenDto refreshTokenDto) {
         log.info("Generating new refresh token");
         String refreshToken = refreshTokenDto.getToken();
-        if (!jwtProvider.validateToken(refreshToken)) {
-            log.error("Invalid refresh token provided");
-            throw new AuthenticationException("Invalid token");
-        }
+        validateToken(refreshToken);
         Long userId = jwtProvider.getUserId(refreshToken);
         log.info("New tokens generated for user {}", userId);
         return JwtTokensDto.builder()
                 .accessToken(jwtProvider.generateAccessToken(userId))
                 .refreshToken(jwtProvider.generateRefreshToken(userId))
                 .build();
+    }
+
+    private void validateToken(String token) {
+        if (!jwtProvider.validateToken(token)) {
+            log.error("Invalid refresh token provided");
+            throw new AuthenticationException("Invalid token");
+        }
     }
 }
 

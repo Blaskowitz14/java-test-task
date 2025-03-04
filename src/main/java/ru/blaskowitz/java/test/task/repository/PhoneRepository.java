@@ -6,5 +6,5 @@ import ru.blaskowitz.java.test.task.model.PhoneData;
 
 @Repository
 public interface PhoneRepository extends JpaRepository<PhoneData, Long> {
-    boolean existsByPhoneAndUser_IdNot(String phone, Long userId);
+    boolean existsByPhoneAndUserIdNot(String phone, Long userId);
 }

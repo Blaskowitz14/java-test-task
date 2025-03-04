@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isEmailUnavailable(String email, Long userId) {
-        boolean unavailable = emailRepository.existsByEmailAndUser_IdNot(email, userId);
+        boolean unavailable = emailRepository.existsByEmailAndUserIdNot(email, userId);
         if (unavailable) {
             log.error("Email {} is unavailable for user {}", email, userId);
         }
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isPhoneUnavailable(String phone, Long userId) {
-        boolean unavailable = phoneRepository.existsByPhoneAndUser_IdNot(phone, userId);
+        boolean unavailable = phoneRepository.existsByPhoneAndUserIdNot(phone, userId);
         if (unavailable) {
             log.error("Phone {} is unavailable for user {}", phone, userId);
         }
