@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: "27.02.2025/db.changelog-release.yaml"
+      relativeToChangelogFile: true
+  - include:
+      file: "28.02.2025/db.changelog-release.yaml"
+      relativeToChangelogFile: true

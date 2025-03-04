@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - include:
+      file: "01_create_user_table.yaml"
+      relativeToChangelogFile: true
+  - include:
+      file: "02_create_account_table.yaml"
+      relativeToChangelogFile: true
+  - include:
+      file: "03_create_email_data_table.yaml"
+      relativeToChangelogFile: true
+  - include:
+      file: "04_create_phone_data_table.yaml"
+      relativeToChangelogFile: true
+  - include:
+      file: "05_insert_first_user.yaml"
+      relativeToChangelogFile: true
+  - include:
+      file: "06_insert_second_user.yaml"
+      relativeToChangelogFile: true

@@ -1,0 +1,76 @@
+databaseChangeLog:
+  - changeSet:
+      id: 27.02.2025_05
+      author: blaskowitzwork@gmail.com
+      changes:
+        - insert:
+            tableName: user
+            columns:
+              - column: { name: id, value: 1 }
+              - column: { name: name, value: "Иван Петров" }
+              - column: { name: date_of_birth, value: "1988-06-15" }
+              - column: { name: password, value: "$2a$10$zXonBK4wodx2xj78/m17BuTdD7pREEeCS8ZDQrWMQvSloRbYbyUCO" }
+
+        - insert:
+            tableName: account
+            columns:
+              - column: { name: id, value: 1 }
+              - column: { name: user_id, value: 1 }
+              - column: { name: initial_balance, value: 1000.00}
+              - column: { name: balance, value: 1000.00 }
+
+        - insert:
+            tableName: email_data
+            columns:
+              - column: { name: id, value: 1 }
+              - column: { name: user_id, value: 1 }
+              - column: { name: email, value: "ivan.petrov@gmail.com" }
+
+        - insert:
+            tableName: email_data
+            columns:
+              - column: { name: id, value: 2 }
+              - column: { name: user_id, value: 1 }
+              - column: { name: email, value: "ivan.work@company.com" }
+
+        - insert:
+            tableName: email_data
+            columns:
+              - column: { name: id, value: 3 }
+              - column: { name: user_id, value: 1 }
+              - column: { name: email, value: "petrov88@yahoo.com" }
+
+        - insert:
+            tableName: email_data
+            columns:
+              - column: { name: id, value: 4 }
+              - column: { name: user_id, value: 1 }
+              - column: { name: email, value: "ivan.p@mail.ru" }
+
+        - insert:
+            tableName: phone_data
+            columns:
+              - column: { name: id, value: 1 }
+              - column: { name: user_id, value: 1 }
+              - column: { name: phone, value: "79671087514" }
+
+        - insert:
+            tableName: phone_data
+            columns:
+              - column: { name: id, value: 2 }
+              - column: { name: user_id, value: 1 }
+              - column: { name: phone, value: "79675551234" }
+
+        - insert:
+            tableName: phone_data
+            columns:
+              - column: { name: id, value: 3 }
+              - column: { name: user_id, value: 1 }
+              - column: { name: phone, value: "79672349876" }
+
+        - insert:
+            tableName: phone_data
+            columns:
+              - column: { name: id, value: 4 }
+              - column: { name: user_id, value: 1 }
+              - column: { name: phone, value: "79679998877" }
