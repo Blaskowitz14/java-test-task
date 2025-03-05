@@ -57,8 +57,10 @@ public class AccountServiceImpl implements AccountService {
 
         Long firstId = Math.min(fromId, transferDto.getTo());
         Long secondId = Math.max(fromId, transferDto.getTo());
+
         Account firstAccount = getAccountOrThrow(accountRepository.selectByUserIdForUpdate(firstId));
         Account secondAccount = getAccountOrThrow(accountRepository.selectByUserIdForUpdate(secondId));
+
         Account fromAccount = fromId.equals(firstId) ? firstAccount : secondAccount;
         Account toAccount = fromId.equals(firstId) ? secondAccount : firstAccount;
 

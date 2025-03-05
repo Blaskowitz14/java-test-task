@@ -23,7 +23,6 @@ public class UpdateBalanceScheduler {
             log.info("updateBalancesTask completed successfully");
         } catch (Exception e) {
             log.error("Error occurred during updateBalancesTask", e);
-            throw e;
         }
     }
 }
