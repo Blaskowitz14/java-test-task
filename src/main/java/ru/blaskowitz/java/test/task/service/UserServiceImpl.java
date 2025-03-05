@@ -8,8 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.blaskowitz.java.test.task.dto.request.ContactsDto;
+import ru.blaskowitz.java.test.task.dto.request.ContactSetDto;
 import ru.blaskowitz.java.test.task.dto.request.FilterDto;
 import ru.blaskowitz.java.test.task.dto.response.UserDto;
 import ru.blaskowitz.java.test.task.exception.DuplicateContactException;
@@ -25,6 +26,7 @@ import ru.blaskowitz.java.test.task.specification.UserSpecificationBuilder;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -47,11 +49,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     @CacheEvict(value = "users", key = "#userId")
-    public UserDto updateContacts(Long userId, ContactsDto contactsDto) {
+    public UserDto updateContacts(Long userId, ContactSetDto contactSetDto) {
         log.info("Updating contacts for user {} with emails {} and phones {}",
-                 userId, contactsDto.getEmails(), contactsDto.getPhones());
-        Set<String> emails = contactsDto.getEmails();
-        Set<String> phones = contactsDto.getPhones();
+                 userId, contactSetDto.getEmails(), contactSetDto.getPhones());
+        Set<String> emails = contactSetDto.getEmails();
+        Set<String> phones = contactSetDto.getPhones();
 
         emails.forEach(email -> {
             if(isEmailUnavailable(email, userId)) {
@@ -65,11 +67,10 @@ public class UserServiceImpl implements UserService {
         });
 
         User user = findUserById(userId);
-        setEmails(user, emails);
-        setPhones(user, phones);
-        User updatedUser = userRepository.save(user);
+        updateEmails(user, emails);
+        updatePhones(user, phones);
         log.info("Contacts updated for user {}", userId);
-        return userMapper.toUserDto(updatedUser);
+        return userMapper.toUserDto(userRepository.save(user));
     }
 
     @Override
@@ -117,26 +118,34 @@ public class UserServiceImpl implements UserService {
         return unavailable;
     }
 
-    private void setEmails(User user, Set<String> newEmails) {
-        user.getEmails().clear();
-        userRepository.flush();
-        newEmails.forEach(email -> {
-            EmailData emailData = new EmailData();
-            emailData.setEmail(email);
-            emailData.setUser(user);
-            user.getEmails().add(emailData);
-        });
+    private void updateEmails(User user, Set<String> newEmails) {
+        user.getEmails().removeIf(emailData -> !newEmails.contains(emailData.getEmail()));
+        Set<String> currentEmails = user.getEmails().stream()
+                .map(EmailData::getEmail)
+                .collect(Collectors.toSet());
+        newEmails.stream()
+                .filter(email -> !currentEmails.contains(email))
+                .forEach(email -> {
+                    EmailData emailData = new EmailData();
+                    emailData.setEmail(email);
+                    emailData.setUser(user);
+                    user.getEmails().add(emailData);
+                });
     }
 
-    private void setPhones(User user, Set<String> newPhones) {
-        user.getPhones().clear();
-        userRepository.flush();
-        newPhones.forEach(phone -> {
-            PhoneData phoneData = new PhoneData();
-            phoneData.setPhone(phone);
-            phoneData.setUser(user);
-            user.getPhones().add(phoneData);
-        });
+    private void updatePhones(User user, Set<String> newPhones) {
+        user.getPhones().removeIf(phoneData -> !newPhones.contains(phoneData.getPhone()));
+        Set<String> currentPhones = user.getPhones().stream()
+                .map(PhoneData::getPhone)
+                .collect(Collectors.toSet());
+        newPhones.stream()
+                .filter(phone -> !currentPhones.contains(phone))
+                .forEach(phone -> {
+                    PhoneData phoneData = new PhoneData();
+                    phoneData.setPhone(phone);
+                    phoneData.setUser(user);
+                    user.getPhones().add(phoneData);
+                });
     }
 }
 

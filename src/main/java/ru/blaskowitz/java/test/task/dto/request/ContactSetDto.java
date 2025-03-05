@@ -14,8 +14,7 @@ import javax.validation.constraints.Size;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactsDto {
-
+public class ContactSetDto {
     @NotEmpty(message = "Emails cannot be empty")
     private Set <@Email(message = "Invalid email format")
             @Size(max = 200)

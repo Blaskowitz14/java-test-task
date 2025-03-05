@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.blaskowitz.java.test.task.dto.request.ContactsDto;
+import ru.blaskowitz.java.test.task.dto.request.ContactSetDto;
 import ru.blaskowitz.java.test.task.dto.request.FilterDto;
 import ru.blaskowitz.java.test.task.dto.response.UserDto;
 import ru.blaskowitz.java.test.task.service.UserService;
@@ -33,9 +33,9 @@ public class UserController {
     }
 
     @PatchMapping("/contacts")
-    public ResponseEntity<UserDto> updateUser(@Valid @RequestBody ContactsDto contactsDto,
+    public ResponseEntity<UserDto> updateUser(@Valid @RequestBody ContactSetDto contactSetDto,
                                               @Parameter(hidden = true) @AuthenticationPrincipal Long userId) {
-        return ResponseEntity.ok(userService.updateContacts(userId, contactsDto));
+        return ResponseEntity.ok(userService.updateContacts(userId, contactSetDto));
     }
 
     @PostMapping("/search")
